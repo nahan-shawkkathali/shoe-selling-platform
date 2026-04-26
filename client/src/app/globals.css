@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+/* ===== GLOBAL RESET / BASE ===== */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: #f8fafc;
+}
+
+body {
+  color: #111827;
+}
+
+/* ===== APP LAYOUT ===== */
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+/* ============ SIDEBAR ============ */
+
+.sidebar {
+  width: 230px;
+  min-width: 230px;
+  height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.sidebar-title {
+  margin: 0 0 24px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  text-decoration: none;
+  display: block;
+}
+
+.sidebar-link-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link-inner:hover {
+  background: #eef2ff;
+  color: #4f46e5;
+  transform: translateX(3px);
+}
+
+.sidebar-user {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.sidebar-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c7d2fe, #818cf8);
+}
+
+/* ===== PAGE ===== */
+
+.page-container {
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.page-link-btn {
+  padding: 10px 16px;
+  background: #4f46e5;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+/* ===== PRODUCT FORM ===== */
+
+.product-form-page {
+  padding: 24px;
+}
+
+.product-form-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.product-form-title {
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.product-input,
+.product-textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.variant-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1.2fr auto;
+  gap: 12px;
+}
+
+.variant-add-btn,
+.product-submit-btn {
+  background: #4f46e5;
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.variant-remove-btn {
+  background: red;
+  color: white;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .variant-row {
+    grid-template-columns: 1fr;
+  }
+}
