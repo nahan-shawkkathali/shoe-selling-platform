@@ -2,43 +2,30 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import ClientNavbar from "@/components/client/ClientNavbar";
 
-export default function SignupPage() {
+export default function CustomerSignupPage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   function handleChange(e) {
-    setFormData((prev) => ({
-      ...prev,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value,
-    }));
+    });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
     setMessage("");
-
-    if (formData.password !== formData.confirmPassword) {
-      setMessage("Passwords do not match");
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      setMessage("Password must be at least 6 characters");
-      return;
-    }
 
     try {
       setLoading(true);
@@ -49,132 +36,74 @@ export default function SignupPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: formData.name.trim(),
-          email: formData.email.trim().toLowerCase(),
-          password: formData.password,
+          ...formData,
+          role: "customer",
         }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setMessage(data.message || "Signup failed");
-        return;
+        throw new Error(data.message || "Signup failed");
       }
 
+      setMessage("Signup successful");
       router.push("/customer/login");
     } catch (error) {
-      setMessage("Something went wrong");
+      setMessage(error.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-sm p-8">
-        <h1 className="text-3xl font-bold text-center mb-2">
-          Create Account
-        </h1>
+    <div className="min-h-screen bg-gray-50">
+      <ClientNavbar />
+      <div className="max-w-md mx-auto py-16 px-4">
+        <div className="bg-white shadow rounded p-6">
+          <h1 className="text-3xl font-bold mb-6 text-center">Customer Sign Up</h1>
 
-        <p className="text-center text-gray-500 mb-8">
-          Sign up to shop and track your orders.
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block font-medium mb-2">Name</label>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
               name="name"
+              placeholder="Name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter your name"
+              className="w-full border rounded px-4 py-3"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-black"
             />
-          </div>
-
-          <div>
-            <label className="block font-medium mb-2">Email</label>
             <input
               type="email"
               name="email"
+              placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email"
+              className="w-full border rounded px-4 py-3"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-black"
             />
-          </div>
-
-          <div>
-            <label className="block font-medium mb-2">Password</label>
-
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Create password"
-                required
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-20 outline-none focus:border-black"
-              />
-
-              <button
-                type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold"
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <label className="block font-medium mb-2">Confirm Password</label>
-
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="Confirm password"
-                required
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-20 outline-none focus:border-black"
-              />
-
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold"
-              >
-                {showConfirmPassword ? "Hide" : "Show"}
-              </button>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-black text-white rounded-lg py-3 disabled:opacity-60"
-          >
-            {loading ? "Creating account..." : "Create Account"}
-          </button>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full border rounded px-4 py-3"
+              required
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-black text-white py-3 rounded"
+            >
+              {loading ? "Creating..." : "Sign Up"}
+            </button>
+          </form>
 
           {message && (
-            <p className="text-sm text-center text-red-600">{message}</p>
+            <p className="mt-4 text-sm text-center text-red-600">{message}</p>
           )}
-        </form>
-
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Already have an account?{" "}
-          <Link href="/customer/login" className="font-semibold hover:underline">
-            Login
-          </Link>
-        </p>
+        </div>
       </div>
     </div>
   );
